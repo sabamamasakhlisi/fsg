@@ -27,6 +27,10 @@ export const lang = {
 
             office_title: 'offices',
 
+            office_subQuestion : 'In which countries and cities are FSG services available?',
+
+            office_subtitle : 'Currently, the offices of Fast Service Group operate in the following countries: Georgia, Italy, France, Germany, Spain, Czech Republic, Poland. <br/> In addition to the existing offices, it is possible to contact the company representatives to use the services from any region of the countries. ',
+
             contact_title: 'contact us',
             contact_button: 'send'
         }
@@ -58,6 +62,10 @@ export const lang = {
             about_description: 'Fast Service Group это международная компания, которая осуществляет транспортировку грузов в Европу и Грузию. <br/> <br/> Наш сервис доступен по всей Грузии. Мы предоставляем нашим клиентам возможность в кратчайшие сроки и с соблюдением всех мер безопасности получать или отправить посылку в Европу.<br/> <br/> Для улучшения сервиса мы поэтапно открываем новые офисы во многих странах Европы.<br/> <br/> Наша цель предоставить нашим клиентам доступ к электронным сервисам, которые обеспечивают получение информации в он-лайн режиме о вашей посылке.',
 
             office_title: 'Офисы',
+
+            office_subQuestion : 'В каких странах доступен наш сервис?',
+            office_subtitle : 'На данный момент мы оперируем в следующих странах: Италия, Франция, Германия, Испания, Чехия, Польша, Грузия. Мы работаем как из наших региональных офисов, так и по дистанционным заказам наших клиентов. <br/> Смотрите список городов где есть наши офисы в приложении.',
+
 
             contact_title: 'Контакт',
             contact_button: 'Отправить'

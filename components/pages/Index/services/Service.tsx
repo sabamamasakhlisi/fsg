@@ -86,11 +86,11 @@ const Service = () => {
           </div>
 
           <div className="services_text">
-            {text ? defaultText ? <div>{ReactHtmlParser(text[0])}</div> : <div>{ReactHtmlParser(displayText)}</div> : ""}
+            {text ? defaultText ? <div className="service_wrapper">{ReactHtmlParser(text[0])}</div> : <div className="service_wrapper">{ReactHtmlParser(displayText)}</div> : ""}
 
           </div>
 
-          <div className="goals">
+          {/* <div className="goals">
             <p className="f-size-p2 f-weight-l"
               data-translation='service_description'>
               ფოსტაგრამის მთავარი მიზანი პარტნიორი კომპანიებისთვის მიტანის
@@ -98,7 +98,7 @@ const Service = () => {
               დამატებითი საჭიროების შემთხვევაში, მზად ვართ, დავამუშაოთ
               თქვენი მოთხოვნა და შევქმნათ თქვენზე მორგებული სერვისი.
             </p>
-          </div>
+          </div> */}
         </div>
       </section>
     </>
