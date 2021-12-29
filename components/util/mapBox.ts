@@ -18,6 +18,7 @@ export const mapBox = () => {
   };
 
   const successLocation = (position) => {
+    console.log(position,'position')
     setupMap([position.coords.longitude, position.coords.latitude]);
   };
 

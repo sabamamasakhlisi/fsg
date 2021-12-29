@@ -241,7 +241,9 @@
     .services {
         .services_container {
             padding: 12vw 7vw !important;
-
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             .services_text {
 
                 ul {
@@ -256,7 +258,7 @@
             .services_btns {
 
                 .btn {
-                    width: 100% !important;
+                    width: 20rem !important;
                 }
             }
         }

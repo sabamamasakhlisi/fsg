@@ -33,7 +33,7 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
             everyEveryZone = everyZone
             break;
     }
-
+    
     useEffect(() => {
 
 
@@ -61,6 +61,7 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
             setCost(finalPrice)
         }
     }
+    console.log(everyEveryZone,'every zone')
 
     return (
         <>

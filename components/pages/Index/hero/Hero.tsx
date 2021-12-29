@@ -19,7 +19,7 @@ const Hero = () => {
 
   useEffect(() => {
     if (window.innerWidth > 1080) {
-      setVideoSource("/videos/animation.mp4")
+      setVideoSource("/videos/video-render.mp4")
     } else {
       setVideoSource("/videos/for_mobile1.mp4")
     }

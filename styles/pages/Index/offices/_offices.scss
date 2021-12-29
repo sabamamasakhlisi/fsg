@@ -64,4 +64,35 @@
             }
         }
     }
+    
+      @media screen and (max-width: $small-screen) {
+        .offices {
+            .offices_container{
+                height: initial !important;
+                grid-template-rows: auto 1fr !important;
+                padding: 0;
+                width: 100%;
+                .heading {
+                    display: flex;
+                    align-items: center;
+                    margin: initial !important;
+                    justify-content: initial !important;
+                    width: 100%;
+                }
+        
+                .postagram_map {
+                    width: 100% !important;
+                    height: 70%;
+                }
+                .offices_subtitle{
+                    flex-direction: column;
+                    width: 100% !important;
+                    display: flex;
+                    justify-content: center;
+                    padding: 0;
+                }
+            }
+        }
+    }
 }
+    
