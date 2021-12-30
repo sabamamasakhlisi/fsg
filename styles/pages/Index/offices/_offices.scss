@@ -79,10 +79,14 @@
                     justify-content: initial !important;
                     width: 100%;
                 }
+
+                .main_header {
+                    width: 100%;
+                }
         
                 .postagram_map {
                     width: 100% !important;
-                    height: 70%;
+                    height: 400px;
                 }
                 .offices_subtitle{
                     flex-direction: column;
