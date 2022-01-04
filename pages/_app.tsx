@@ -36,12 +36,12 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <HeadAndMeta
-        title='Postagram'
-        description='პოსტაგრამი - საფოსტო საკურიერო სერვისები'
+        title='Fast Service Group'
+        description='FSG - საფოსტო საკურიერო სერვისები'
         favIconImagePath='/svg/small_icon.svg'
-        baseUrl='https://postagram.ge'
-        ogTitle='📦 postagram'
-        ogDescription='პოსტაგრამი - საფოსტო საკურიერო სერვისები'
+        baseUrl='https://fsgpost.ge'
+        ogTitle='📦 Fast Service Group'
+        ogDescription='FSG - საფოსტო საკურიერო სერვისები'
         ogImagePath='/pictures/postagram_og.png' />
 
       <GeistProvider>
