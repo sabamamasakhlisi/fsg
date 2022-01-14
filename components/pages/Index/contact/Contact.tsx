@@ -22,7 +22,6 @@ const Contact = () => {
 
   const handleSend = () => {
     if (value.name.length > 2 && validateEmail(value.email)) {
-      console.log(value)
     }
   }
 

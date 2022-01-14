@@ -18,9 +18,9 @@ const Navigation = () => {
   const changeHtmlLang = async (choosenLang) => {
     await setCookie('lang', choosenLang)
 
-    if (choosenLang == 'geo')
-      Router.reload();
+ 
 
+    if(choosenLang !== 'geo') {
 
     await (async () => {
       const translateElements = document.querySelectorAll('[data-translation]')
@@ -33,13 +33,16 @@ const Navigation = () => {
         el.innerHTML = lang[choosenLang].global.navigation[el.dataset.translationGlobal]
       })
     })()
+  } else Router.reload()
   }
 
 
 
   const handler = (val) => {
-    changeHtmlLang(val)
+    changeHtmlLang(val.target.value)
   };
+
+
 
 
 
@@ -76,7 +79,38 @@ const Navigation = () => {
 
               <li>
                 <div className="select_lang">
-                  <Select
+                  <label>
+                    <input 
+                      id="geo"
+                      value="geo"
+                      name="lang"
+                      type="radio"
+                      defaultChecked={cookies.lang === 'geo'}
+                      onChange={handler}
+                      />
+                      <div className={'ge_language'} />
+                    </label>
+                    <label>
+                      <input 
+                      id="rus"
+                      value="rus"
+                      name="lang"
+                      type="radio"
+                      onChange={handler}
+                      />
+                      <div className={'rus_language'} />
+                      </label>
+                      <label>
+                      <input 
+                      id="eng"
+                      value="eng"
+                      name="lang"
+                      type="radio"
+                      onChange={handler}
+                      />
+                      <div className={'eng_language'} />
+                      </label>
+                  {/* <Select
                     placeholder="Choose Language"
                     initialValue={cookies.lang}
                     size="medium"
@@ -84,7 +118,7 @@ const Navigation = () => {
                     <Select.Option value="geo">geo</Select.Option>
                     <Select.Option value="eng">eng</Select.Option>
                     <Select.Option value="rus">rus</Select.Option>
-                  </Select>
+                  </Select> */}
                 </div>
               </li>
             </ul>

@@ -8,10 +8,10 @@
         ],
 
         "serviceText": [
-            "<div class='service_header'><h2>ამანათების გაგზავნა</h2> <div class='servicesText send_parcel'> </div> </div>",
-            "<div class='service_header'><h2>კომერციული ტვირთის გაგზავნა </h2> <div class='servicesText send_comercial_parcel'> </div> </div> <br /> <p> კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. </p> ",
-            "<div class='service_header'><h2>პერსონალური ამანათის გაგზავნა </h2> <div class='servicesText send_personal_parcel'> </div> </div>",
-            "<div class='service_header'><h2>ფულადი გზავნილის გაგზავნა</h2> <div class='servicesText send_money'> </div> </div> <br /> <p> ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს. </p> <div class='servicesText send_money'> </div> "
+            "<article class='service_header'><div class='servicesText send_parcel'> </div> <section class='mainText' > <h1>ამანათების გაგზავნა</h1> ამანათების გაგზავნა კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. </section> </article> ",
+            "<article class='service_header'><div class='servicesText send_comercial_parcel'> </div> <section class='mainText' ><h1>კომერციული ტვირთის გაგზავნა </h1> კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით.  პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით.</section> </article>  ",
+            "<article class='service_header'><div class='servicesText send_personal_parcel'> </div> <section class='mainText' ><h1>პერსონალური ამანათის გაგზავნა </h1> პერსონალური ამანათის გაგზავნა პერსონალური ამანათის გაგზავნა პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით.</section> </article> ",
+            "<article class='service_header'><div class='servicesText send_money'> </div> <section class='mainText' ><h1>ფულადი გზავნილის გაგზავნა</h1> ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს</section> </article>  "
 
         ]
 
@@ -27,10 +27,10 @@
         ],
 
         "serviceText": [
-            "<div class='service_header'><h2>Отправка посылок</h2> <div class='servicesText send_parcel'> </div> </div>",
-            "<div class='service_header'><h2>Перевозка коммерческих грузов. </h2>  <div class='servicesText send_comercial_parcel'> </div> </div> <br /> <p>тариф определяется в зависимости от веса-объема</p> ",
-            "<div class='service_header'><h2>Отправка личной корреспонденции </h2>  <div class='servicesText send_personal_parcel'> </div> </div> ",
-            "<div class='service_header'><h2>Денежные переводы </h2> <div class='servicesText send_money'> </div> </div> <br /> <p>комиссия 1%</p> "
+            "<article class='service_header'><div class='servicesText send_parcel'> </div> <section class='mainText' > <h1>Отправка посылок</h1> ამანათების გაგზავნა კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. კომერციული ტვირთის გაგზავნისას მოქმედებს სპეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. </section> </article> ",
+            "<article class='service_header'><div class='servicesText send_comercial_parcel'> </div> <section class='mainText' ><h1>Перевозка коммерческих грузов. </h1>  тариф определяется в зависимости от веса-объематариф определяется в зависимости от веса-объематариф определяется в зависимости от веса-объема</section> </article>  ",
+            "<article class='service_header'><div class='servicesText send_personal_parcel'> </div> <section class='mainText' > <h1>Отправка личной корреспонденции </h1>პერსონალური ამანათის გაგზავნა პერსონალური ამანათის გაგზავნა პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით. პეციალური ტარიფები, რომელიც გამოითვლება ტვირთის წონისა და მოცულობის მიხედვით.</section> </article> ",
+            "<article class='service_header'><div class='servicesText send_money'> </div> <section class='mainText' ><h1>Денежные переводы </h1> комиссия 1% ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს ფულადი გზავნილის განაღდება შესაძლებელია ნებისმიერ ბანკსა და მობაილ ბანკში. საკომისიო შეადგენს 1%-ს</section> </article>  "
         ]
 
 
@@ -48,10 +48,10 @@
         ],
 
         "serviceText": [
-            "<div class='service_header'><h2>Sending a Parcel</h2> <div class='servicesText send_parcel'> </div> </div> ",
-            "<div class='service_header'><h2>Sending Commercial Freight</h2> <div class='servicesText send_comercial_parcel'> </div> </div> <br /> <p> There are special prices for commercial freights. They are calculated based on weight and volume. </p>  ",
-            "<div class='service_header'><h2>Sending Personal Parcel</h2> <div class='servicesText send_personal_parcel'> </div> </div> ",
-            "<div class='service_header'><h2>Money Transfers</h2> <div class='servicesText send_money'> </div> </div> <br /> <p> Money transfers can be easily picked up in cash in any bank or mobile bank. The commission is 1%.</p> "
+            "<div class='service_header'><h1>Sending a Parcel</h1> <div class='servicesText send_parcel'> </div> </div> ",
+            "<div class='service_header'><h1>Sending Commercial Freight</h1> <div class='servicesText send_comercial_parcel'> </div> </div> <br /> <p> There are special prices for commercial freights. They are calculated based on weight and volume. </p>  ",
+            "<div class='service_header'><h1>Sending Personal Parcel</h1> <div class='servicesText send_personal_parcel'> </div> </div> ",
+            "<div class='service_header'><h1>Money Transfers</h1> <div class='servicesText send_money'> </div> </div> <br /> <p> Money transfers can be easily picked up in cash in any bank or mobile bank. The commission is 1%.</p> "
         ]
 
 

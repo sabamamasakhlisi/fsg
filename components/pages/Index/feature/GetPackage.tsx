@@ -61,7 +61,6 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
             setCost(finalPrice)
         }
     }
-    console.log(everyEveryZone,'every zone')
 
     return (
         <>

@@ -1,6 +1,7 @@
 .hero {
   position: relative;
   overflow: hidden;  
+  height: 100vh;
     @media screen and (max-width: $large-screen) {
         height: 56rem !important;
     }
@@ -43,6 +44,7 @@
 
       .hero_input {
         width: 50%;
+        margin-bottom: 50px;
       
 
         @media screen and (max-width: $medium-screen) {

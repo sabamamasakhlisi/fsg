@@ -38,11 +38,11 @@ function MyApp({ Component, pageProps }) {
       <HeadAndMeta
         title='Fast Service Group'
         description='FSG - საფოსტო საკურიერო სერვისები'
-        favIconImagePath='/svg/small_icon.svg'
+        favIconImagePath='/svg/fsg_logo.png'
         baseUrl='https://fsgpost.ge'
         ogTitle='📦 Fast Service Group'
         ogDescription='FSG - საფოსტო საკურიერო სერვისები'
-        ogImagePath='/pictures/postagram_og.png' />
+        ogImagePath='/svg/fsg_logo.png' />
 
       <GeistProvider>
         <CssBaseline />

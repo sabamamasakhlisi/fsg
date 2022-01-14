@@ -15,7 +15,6 @@ const Service = () => {
   let language = cookies.lang
   const [text, setText] = useState([])
   const [btns, setBtns] = useState([])
-  console.log(language,'lan')
 
   useEffect(() => {
     if (cookies.lang) {

@@ -21,7 +21,7 @@ const Hero = () => {
     if (window.innerWidth > 1080) {
       setVideoSource("/videos/video-render.mp4")
     } else {
-      setVideoSource("/videos/for_mobile1.mp4")
+      setVideoSource("/videos/video-render-mobile.mp4")
     }
   }, [])
 
@@ -52,7 +52,7 @@ const Hero = () => {
               transition={{ duration: 0.4, delay: 2.0 }}
               className="f-size-h1 f-weight-bl heading"
               data-translation='hero_title'>
-              გაიმარტივე ამანათის <br/> გაგზავნისა და <br/> ჩაბარების პროცესი.
+              გაიმარტივე <br/>  ამანათის გაგზავნისა <br/> და ჩაბარების პროცესი.
             </motion.h1>
 
 
@@ -61,7 +61,7 @@ const Hero = () => {
               transition={{ duration: 0.4, delay: 2.3 }}
               className="f-size-p2 f-weight-l paragraph"
               data-translation='hero_description'>
-              ისარგებლე სწრაფი, უსაფრთხო სერვისით <br/> საქართველოს ნებისმიერ კუთხეში. 
+              ისარგებლე სწრაფი, <br/> უსაფრთხო სერვისით <br/> საქართველოს ნებისმიერ კუთხეში. 
             </motion.p>
 
 

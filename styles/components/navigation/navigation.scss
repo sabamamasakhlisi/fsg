@@ -56,8 +56,50 @@
 
       .select_lang {
         margin-left: calc(1.5rem + 1vw);
-      }
+        display: flex;
+          [type=radio] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          [type=radio] + div{
+            cursor: pointer;
+            filter : brightness(.74) contrast(.99) grayscale(.63);
+          }
+          [type=radio]:checked + div {
+            filter: none;
+            transition: all .2
+          }
+          label {
+            div{
+              width: 25px;
+              height: 25px;
+              cursor: pointer;
+            }
+          .ge_language{
+            background-image: url("/svg/KA.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          }
+          .eng_language {
+            background-image: url("/svg/EN.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          }
+          .rus_language {
+            background-image: url("/svg/ru.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            height: 21.5px;
+            margin : 0 5px;
+          }
+        }
     }
+  }
 
     .hamburger {
       display: none;
@@ -95,6 +137,11 @@
           }
         }
 
+              .select_lang {
+                margin-left: 0;
+              }
+    
+
         .menu_none {
           display: none;
         }
@@ -103,9 +150,8 @@
             width: 100%;
         }
 
-        .select_lang {
-            padding-bottom:calc(1rem + 1vw) ;
-        }
+       
+        
       }
       .hamburger {
         width: calc(2rem + 1vw);
@@ -129,11 +175,11 @@
         padding: 2rem;
         width: calc(9rem + 9vw) !important;
       }
-
+      
+      }
       .hamburger {
         padding: 1rem !important;
-        width: calc(2rem + 1vw);
+        width: calc(2rem + 1vw);      
       }
     }
   }
-}
