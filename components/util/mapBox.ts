@@ -13,8 +13,28 @@ export const mapBox = () => {
       zoom: 14,
     });
 
+    map.on('click', (event) => {
+      // If the user clicked on one of your markers, get its information.
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: ['fsg'] // replace with your layer name
+      });
+      if (!features.length) {
+        return;
+      }
+      const feature = features[0];
+      const popup = new mapboxgl.Popup({ offset: [0, -15] })
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML(
+        `<p>${feature.properties.description ? feature.properties.description : ''}</p> <br/> <p>${feature.properties.num ? feature.properties?.num : ''}</p>`
+      )
+      .addTo(map);
+    });
+
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav);
+    map.on('load', function () {
+      map.resize();
+  });
   };
 
   const successLocation = (position) => {

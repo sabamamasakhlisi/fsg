@@ -96,6 +96,7 @@ const Navigation = () => {
                       value="rus"
                       name="lang"
                       type="radio"
+                      defaultChecked={cookies.lang === 'rus'}
                       onChange={handler}
                       />
                       <div className={'rus_language'} />
@@ -106,19 +107,11 @@ const Navigation = () => {
                       value="eng"
                       name="lang"
                       type="radio"
+                      defaultChecked={cookies.lang === 'eng'}
                       onChange={handler}
                       />
                       <div className={'eng_language'} />
                       </label>
-                  {/* <Select
-                    placeholder="Choose Language"
-                    initialValue={cookies.lang}
-                    size="medium"
-                    onChange={handler}>
-                    <Select.Option value="geo">geo</Select.Option>
-                    <Select.Option value="eng">eng</Select.Option>
-                    <Select.Option value="rus">rus</Select.Option>
-                  </Select> */}
                 </div>
               </li>
             </ul>

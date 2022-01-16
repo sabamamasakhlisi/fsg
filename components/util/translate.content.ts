@@ -18,6 +18,7 @@ export const lang = {
             calculator_from: 'from',
             calculator_where: 'where',
             calculator_cost: 'cost',
+            calculator_city : 'city',
 
             service_title: 'services',
             service_description: 'The main purpose of Postagram is to simplify and improve the delivery process for the partner companies. As such, in case of any additional needs, we are ready to process your request and create a service that adjusts to you.',
@@ -52,6 +53,7 @@ export const lang = {
             hero_input_placeholder: 'введите номер отслеживания',
 
             calculator_from: 'куда',
+            calculator_city : 'город',
             calculator_where: 'где',
             calculator_cost: 'Стоимость',
 

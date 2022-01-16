@@ -1,7 +1,7 @@
 import { Select, Slider, Input, Spacer } from "@geist-ui/react";
 import { useState, useEffect } from "react";
 
-import { calcPrices, zones, zonesEng, zonesRus, kilogramSteps, everyZone, everyZoneEng, everyZoneRus } from "./feature.data";
+import { fourCountries, defaultPrices,citiesInEng,twoCities,twoNhalfCities,threeCities,fourNhalfCities, zones, zonesEng, zonesRus,citiesInRus,citiesInGeo, everyZone, everyZoneEng, everyZoneRus, fromLocation } from "./feature.data";
 import { useCookies } from 'react-cookie';
 
 
@@ -13,40 +13,106 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
     const [kilogram, setKilogram] = useState<number>(0)
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
+    const [cities,setCities] = useState([]);
+    const [city,setCity] = useState("");
     const [zoneIndex, setZoneIndex] = useState<number>(0)
 
     const [cookies, setCookie, removeCookie] = useCookies(['lang']);
-    let currentLangZone
+    let fromLang;
+    let citiesArr;
+    let currentLangZone;
     let everyEveryZone = []
     switch (cookies.lang) {
         case 'eng':
+            fromLang = fromLocation[1]
             currentLangZone = zonesEng
             everyEveryZone = everyZoneEng
+            citiesArr= citiesInEng;
             break;
         case 'rus':
+            fromLang = fromLocation[2]
             currentLangZone = zonesRus
             everyEveryZone = everyZoneRus
+            citiesArr= citiesInRus;
             break;
 
         default:
+            fromLang = fromLocation[0]
             currentLangZone = zones
             everyEveryZone = everyZone
+            citiesArr= citiesInGeo;
             break;
     }
+
     
     useEffect(() => {
-
-
-        if (!currentLangZone[0][0].includes(from)) currentLangZone[1].includes(from) ? setZoneIndex(1) : setZoneIndex(2)
-        if (!currentLangZone[0][0].includes(to)) currentLangZone[1].includes(to) ? setZoneIndex(1) : setZoneIndex(2)
-        to == currentLangZone[0][0] && from == currentLangZone[0][0] && setZoneIndex(0)
-
+        if(to && from) {
+            if(fourCountries.includes(to)){
+                setZoneIndex(defaultPrices[3])
+            }
+            if(city && !fourCountries.includes(to)) {
+                if(twoCities.includes(city)){
+                    setZoneIndex(defaultPrices[0])
+                } else if(twoNhalfCities.includes(city)){
+                    setZoneIndex(defaultPrices[1])
+                } else if(threeCities.includes(city)){
+                    setZoneIndex(defaultPrices[2])
+                } else if(fourNhalfCities.includes(city)){
+                    setZoneIndex(defaultPrices[4])
+                }
+            }
+            if(to === 'Germany' || to === 'გერმანია' || to === 'Германия') {
+                setZoneIndex(5);
+            }
+            
+        }
         calculate()
-    }, [to, from, kilogram])
+    }, [to, from, city])
+
+    useEffect(() => {
+        setCities([])
+        switch(to) {
+            case 'იტალია':
+                setCities(citiesArr[1]);
+                break;
+            case 'ესპანეთი':
+                setCities(citiesArr[0]);
+                break;
+            case 'საფრანგეთი':
+                setCities(citiesArr[2]);
+                break;
+            case 'Италия' : 
+                setCities(citiesArr[1]);
+                break;
+            case 'Франция' : 
+                setCities(citiesArr[2]);
+                break;
+            case 'Испания' : 
+                setCities(citiesArr[0]);
+                break;
+            case 'Italy' : 
+                setCities(citiesArr[1]);
+                break;
+            case 'France' : 
+                setCities(citiesArr[2]);
+                break;
+            case 'Spain' : 
+                setCities(citiesArr[0]);
+                break;
+            default:
+                setCities([])
+                break;
+        }
+    }, [to,from,cookies.lang])
 
     useEffect(() => {
         calculate()
-    }, [zoneIndex])
+    }, [kilogram,zoneIndex])
+
+    useEffect(()=> {
+        setKilogram(0)
+        setCost(0)
+    },[cookies.lang])
 
 
     const sliderHandler = val => {
@@ -56,10 +122,17 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
 
     const calculate = () => {
         if (to.length > 0 && from.length > 0 && kilogram > 0) {
-            let prices = calcPrices[zoneIndex]
-            let finalPrice = prices[kilogramSteps.indexOf(kilogramSteps.find(kg => kg >= kilogram))]
-            setCost(finalPrice)
-        }
+            if(zoneIndex === 5){
+                if(kilogram >= 1 && kilogram <= 5) {
+                    setCost(25)
+                } else if (kilogram > 5) {
+                    setCost(25 + (5 * (Math.round(kilogram)-5)));
+                }
+            } else {
+            let price = kilogram * zoneIndex;
+            setCost(Math.round(price))
+            }
+        } else if (kilogram === 0) setCost(0)
     }
 
     return (
@@ -77,13 +150,11 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
                             value={from}
                             onChange={(value) => {
                                 setFrom(`${value}`)
-                                setTo(`${currentLangZone[0][0]}`)
+                                setTo(`${currentLangZone[0]}`)
                             }}>
-                            {everyEveryZone.map((zone, i) => (
-                                <Select.Option key={i} value={zone}>
-                                    <p className="f-size-p5 f-weight-r">{zone}</p>
+                                <Select.Option value={fromLang}>
+                                    <p className="f-size-p5 f-weight-r">{fromLang}</p>
                                 </Select.Option>
-                            ))}
                         </Select>
                     </div>
 
@@ -99,11 +170,28 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
                             value={to}
                             onChange={(value) => {
                                 setTo(`${value}`)
-                                setFrom(`${currentLangZone[0][0]}`)
                             }}>
                             {everyEveryZone.map((zone, i) => (
                                 <Select.Option key={i} value={zone}>
                                     <p className="f-size-p5 f-weight-l">{zone}</p>
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="input_city">
+                        <p
+                            className='f-size-p4 f-weight-r'
+                            data-translation='calculator_city'>ქალაქი</p>
+                        <Spacer y={0.5} />
+                        <Select
+                            className="get-package_inputs"
+                            placeholder={city}
+                            value={city}
+                            disabled={cities?.length === 0}
+                            onChange={(value)=> {setCity(`${value}`)}}>
+                            {cities?.map((city, i) => (
+                                <Select.Option key={i} value={city.trim()}>
+                                    <p className="f-size-p5 f-weight-l">{city}</p>
                                 </Select.Option>
                             ))}
                         </Select>
@@ -113,14 +201,6 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
                     <div className="input_kilograms">
                         <p className='f-size-p4 f-weight-r' style={{ marginBottom: '.5rem' }}>{kilogram}kg</p>
                         <Spacer y={0.5} />
-                        {/* <Input
-                            className="f-size-p4 f-weight-r input"
-                            status="secondary"
-                            size="large"
-                            placeholder="წონა"
-                            type='number'
-                            value={`${kilogram}`}
-                            onChange={(e) => setKilogram(+e.target.value)} /> */}
                         <Slider
                             step={.1}
                             style={{ width: '100%' }}
