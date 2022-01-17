@@ -23,7 +23,7 @@ export const mapBox = () => {
       }
       const feature = features[0];
       const popup = new mapboxgl.Popup({ offset: [0, -15] })
-      .setLngLat(feature.geometry.coordinates)
+      .setLngLat(feature.geometry.type === 'Point' && [feature.geometry.coordinates[0],feature.geometry.coordinates[1]])
       .setHTML(
         `<p>${feature.properties.description ? feature.properties.description : ''}</p> <br/> <p>${feature.properties.num ? feature.properties?.num : ''}</p>`
       )
