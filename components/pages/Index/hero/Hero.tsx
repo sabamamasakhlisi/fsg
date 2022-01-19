@@ -109,7 +109,7 @@ const Hero = () => {
             <div
             className={'backgound_video__container'}
           dangerouslySetInnerHTML={{
-            __html: `<video  autoplay  muted >
+            __html: `<video  autoplay playsinline muted >
       <source src=${videoSource} type="video/mp4" />
       Your browser does not support the video tag.
 </video>`,
