@@ -104,9 +104,18 @@ const Hero = () => {
           <GetPackage toggle={toggleCalc} />
 
 
-          <div className="backgound_video__container">
-            <video autoPlay muted src={videoSource}></video>
-          </div>
+          {/* <div className="backgound_video__container">
+            <video autoPlay muted src={videoSource}></video> */}
+            <div
+            className={'backgound_video__container'}
+          dangerouslySetInnerHTML={{
+            __html: `<video  autoplay  muted >
+      <source src=${videoSource} type="video/mp4" />
+      Your browser does not support the video tag.
+</video>`,
+          }}
+        />
+          {/* </div> */}
         </div>
       </section>
     </>
