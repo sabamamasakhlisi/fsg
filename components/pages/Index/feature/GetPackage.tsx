@@ -64,6 +64,9 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
             if(to === 'Germany' || to === 'გერმანია' || to === 'Германия') {
                 setZoneIndex(5);
             }
+            if(to === 'Germany' || to === 'გერმანია' || to === 'Германия') {
+                setZoneIndex(6);
+            }
             
         }
         calculate()
@@ -128,7 +131,14 @@ const GetPackage = ({ toggle }: { toggle: boolean }) => {
                 } else if (kilogram > 5) {
                     setCost(25 + (5 * (Math.round(kilogram)-5)));
                 }
-            } else {
+            } else if (zoneIndex === 6) {
+                if(kilogram >= 1 && kilogram <= 10) {
+                    setCost(60)
+                } else if (kilogram > 10) {
+                    setCost(60 + (6 * (Math.round(kilogram)-10)));
+                }
+            }
+            else {
             let price = kilogram * zoneIndex;
             setCost(Math.round(price))
             }

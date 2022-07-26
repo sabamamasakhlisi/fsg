@@ -42,67 +42,6 @@ module.exports = _interopRequireDefault;
 
 /***/ }),
 
-/***/ 862:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var _typeof = __webpack_require__(8);
-
-function _getRequireWildcardCache() {
-  if (typeof WeakMap !== "function") return null;
-  var cache = new WeakMap();
-
-  _getRequireWildcardCache = function _getRequireWildcardCache() {
-    return cache;
-  };
-
-  return cache;
-}
-
-function _interopRequireWildcard(obj) {
-  if (obj && obj.__esModule) {
-    return obj;
-  }
-
-  if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") {
-    return {
-      "default": obj
-    };
-  }
-
-  var cache = _getRequireWildcardCache();
-
-  if (cache && cache.has(obj)) {
-    return cache.get(obj);
-  }
-
-  var newObj = {};
-  var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-
-  for (var key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-
-      if (desc && (desc.get || desc.set)) {
-        Object.defineProperty(newObj, key, desc);
-      } else {
-        newObj[key] = obj[key];
-      }
-    }
-  }
-
-  newObj["default"] = obj;
-
-  if (cache) {
-    cache.set(obj, newObj);
-  }
-
-  return newObj;
-}
-
-module.exports = _interopRequireWildcard;
-
-/***/ }),
-
 /***/ 316:
 /***/ (function(module) {
 
@@ -125,36 +64,11 @@ module.exports = _objectWithoutPropertiesLoose;
 
 /***/ }),
 
-/***/ 8:
-/***/ (function(module) {
-
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    module.exports = _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-  } else {
-    module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-module.exports = _typeof;
-
-/***/ }),
-
 /***/ 834:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _interopRequireWildcard = __webpack_require__(862);
 
 var _interopRequireDefault = __webpack_require__(318);
 
@@ -166,7 +80,7 @@ var _extends2 = _interopRequireDefault(__webpack_require__(154));
 
 var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(316));
 
-var _react = _interopRequireWildcard(__webpack_require__(297));
+var _react = __webpack_require__(297);
 
 var _headManagerContext = __webpack_require__(816);
 
@@ -176,7 +90,7 @@ var _requestIdleCallback = __webpack_require__(391);
 
 const ScriptCache = new Map();
 const LoadCache = new Set();
-const ignoreProps = ['onLoad', 'dangerouslySetInnerHTML', 'children', 'onError', 'strategy', 'preload'];
+const ignoreProps = ['onLoad', 'dangerouslySetInnerHTML', 'children', 'onError', 'strategy'];
 
 const loadScript = props => {
   const {
@@ -244,12 +158,12 @@ const loadScript = props => {
 
 function handleClientScriptLoad(props) {
   const {
-    strategy = 'defer'
+    strategy = 'afterInteractive'
   } = props;
 
-  if (strategy === 'defer') {
+  if (strategy === 'afterInteractive') {
     loadScript(props);
-  } else if (strategy === 'lazy') {
+  } else if (strategy === 'lazyOnload') {
     window.addEventListener('load', () => {
       (0, _requestIdleCallback.requestIdleCallback)(() => loadScript(props));
     });
@@ -274,22 +188,19 @@ function Script(props) {
   const {
     src = '',
     onLoad = () => {},
-    dangerouslySetInnerHTML,
-    children = '',
-    strategy = 'defer',
-    onError,
-    preload = false
+    strategy = 'afterInteractive',
+    onError
   } = props,
-        restProps = (0, _objectWithoutPropertiesLoose2.default)(props, ["src", "onLoad", "dangerouslySetInnerHTML", "children", "strategy", "onError", "preload"]); // Context is available only during SSR
+        restProps = (0, _objectWithoutPropertiesLoose2.default)(props, ["src", "onLoad", "dangerouslySetInnerHTML", "strategy", "onError"]); // Context is available only during SSR
 
   const {
     updateScripts,
     scripts
   } = (0, _react.useContext)(_headManagerContext.HeadManagerContext);
   (0, _react.useEffect)(() => {
-    if (strategy === 'defer') {
+    if (strategy === 'afterInteractive') {
       loadScript(props);
-    } else if (strategy === 'lazy') {
+    } else if (strategy === 'lazyOnload') {
       loadLazyScript(props);
     }
   }, [props, strategy]);
@@ -298,39 +209,9 @@ function Script(props) {
     return null;
   }
 
-  if (strategy === 'dangerouslyBlockRendering') {
-    const syncProps = (0, _extends2.default)({}, restProps);
-
-    for (const [k, value] of Object.entries({
-      src,
-      onLoad,
-      onError,
-      dangerouslySetInnerHTML,
-      children
-    })) {
-      if (!value) {
-        continue;
-      }
-
-      if (k === 'children') {
-        syncProps.dangerouslySetInnerHTML = {
-          __html: typeof value === 'string' ? value : Array.isArray(value) ? value.join('') : ''
-        };
-      } else {
-        ;
-        syncProps[k] = value;
-      }
-    }
-
-    return /*#__PURE__*/_react.default.createElement("script", syncProps);
-  } else if (strategy === 'defer') {
-    if (updateScripts && preload) {
-      scripts.defer = (scripts.defer || []).concat([src]);
-      updateScripts(scripts);
-    }
-  } else if (strategy === 'eager') {
+  if (strategy === 'beforeInteractive') {
     if (updateScripts) {
-      scripts.eager = (scripts.eager || []).concat([(0, _extends2.default)({
+      scripts.beforeInteractive = (scripts.beforeInteractive || []).concat([(0, _extends2.default)({
         src,
         onLoad,
         onError
@@ -442,6 +323,13 @@ function initHeadManager() {
         updatePromise = null;
         const tags = {};
         head.forEach(h => {
+          if ( // If the font tag is loaded only on client navigation
+          // it won't be inlined. In this case revert to the original behavior
+          h.type === 'link' && h.props['data-optimized-fonts'] && !document.querySelector(`style[data-href="${h.props['data-href']}"]`)) {
+            h.props.href = h.props['data-href'];
+            h.props['data-href'] = undefined;
+          }
+
           const components = tags[h.type] || [];
           components.push(h);
           tags[h.type] = components;
@@ -504,15 +392,15 @@ exports.cancelIdleCallback = cancelIdleCallback;
 "use strict";
 
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 exports.__esModule = true;
 exports.Html = Html;
@@ -523,7 +411,7 @@ var _propTypes = _interopRequireDefault(__webpack_require__(229));
 
 var _react = _interopRequireWildcard(__webpack_require__(297));
 
-var _server = _interopRequireDefault(__webpack_require__(97));
+var _server = _interopRequireDefault(__webpack_require__(168));
 
 var _constants = __webpack_require__(227);
 
@@ -609,6 +497,89 @@ function getDocumentFiles(buildManifest, pathname, inAmpMode) {
     pageFiles,
     allFiles: [...new Set([...sharedFiles, ...pageFiles])]
   };
+}
+
+function getPolyfillScripts(context, props) {
+  // polyfills.js has to be rendered as nomodule without async
+  // It also has to be the first script to load
+  const {
+    assetPrefix,
+    buildManifest,
+    devOnlyCacheBusterQueryString,
+    disableOptimizedLoading
+  } = context;
+  return buildManifest.polyfillFiles.filter(polyfill => polyfill.endsWith('.js') && !polyfill.endsWith('.module.js')).map(polyfill => /*#__PURE__*/_react.default.createElement("script", {
+    key: polyfill,
+    defer: !disableOptimizedLoading,
+    nonce: props.nonce,
+    crossOrigin: props.crossOrigin || undefined,
+    noModule: true,
+    src: `${assetPrefix}/_next/${polyfill}${devOnlyCacheBusterQueryString}`
+  }));
+}
+
+function getPreNextScripts(context, props) {
+  const {
+    scriptLoader,
+    disableOptimizedLoading
+  } = context;
+  return (scriptLoader.beforeInteractive || []).map(file => {
+    const {
+      strategy
+    } = file,
+          scriptProps = _objectWithoutProperties(file, ["strategy"]);
+
+    return /*#__PURE__*/_react.default.createElement("script", Object.assign({}, scriptProps, {
+      defer: !disableOptimizedLoading,
+      nonce: props.nonce,
+      crossOrigin: props.crossOrigin || undefined
+    }));
+  });
+}
+
+function getDynamicChunks(context, props, files) {
+  const {
+    dynamicImports,
+    assetPrefix,
+    isDevelopment,
+    devOnlyCacheBusterQueryString,
+    disableOptimizedLoading
+  } = context;
+  return dynamicImports.map(file => {
+    if (!file.endsWith('.js') || files.allFiles.includes(file)) return null;
+    return /*#__PURE__*/_react.default.createElement("script", {
+      async: !isDevelopment && disableOptimizedLoading,
+      defer: !disableOptimizedLoading,
+      key: file,
+      src: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
+      nonce: props.nonce,
+      crossOrigin: props.crossOrigin || undefined
+    });
+  });
+}
+
+function getScripts(context, props, files) {
+  var _buildManifest$lowPri;
+
+  const {
+    assetPrefix,
+    buildManifest,
+    isDevelopment,
+    devOnlyCacheBusterQueryString,
+    disableOptimizedLoading
+  } = context;
+  const normalScripts = files.allFiles.filter(file => file.endsWith('.js'));
+  const lowPriorityScripts = (_buildManifest$lowPri = buildManifest.lowPriorityFiles) == null ? void 0 : _buildManifest$lowPri.filter(file => file.endsWith('.js'));
+  return [...normalScripts, ...lowPriorityScripts].map(file => {
+    return /*#__PURE__*/_react.default.createElement("script", {
+      key: file,
+      src: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
+      nonce: props.nonce,
+      async: !isDevelopment && disableOptimizedLoading,
+      defer: !disableOptimizedLoading,
+      crossOrigin: props.crossOrigin || undefined
+    });
+  });
 }
 /**
 * `Document` component handles the initial `document` markup and renders only on the server side.
@@ -760,7 +731,7 @@ class Head extends _react.Component {
     const preloadFiles = files.allFiles.filter(file => {
       return file.endsWith('.js');
     });
-    return [...(scriptLoader.eager || []).map(file => /*#__PURE__*/_react.default.createElement("link", {
+    return [...(scriptLoader.beforeInteractive || []).map(file => /*#__PURE__*/_react.default.createElement("link", {
       key: file.src,
       nonce: this.props.nonce,
       rel: "preload",
@@ -774,14 +745,23 @@ class Head extends _react.Component {
       href: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
       as: "script",
       crossOrigin: this.props.crossOrigin || undefined
-    })), ...(scriptLoader.defer || []).map(file => /*#__PURE__*/_react.default.createElement("link", {
-      key: file,
-      nonce: this.props.nonce,
-      rel: "preload",
-      href: file,
-      as: "script",
-      crossOrigin: this.props.crossOrigin || undefined
     }))];
+  }
+
+  getDynamicChunks(files) {
+    return getDynamicChunks(this.context, this.props, files);
+  }
+
+  getPreNextScripts() {
+    return getPreNextScripts(this.context, this.props);
+  }
+
+  getScripts(files) {
+    return getScripts(this.context, this.props, files);
+  }
+
+  getPolyfillScripts() {
+    return getPolyfillScripts(this.context, this.props);
   }
 
   handleDocumentScriptLoaderItems(children) {
@@ -793,10 +773,10 @@ class Head extends _react.Component {
 
     _react.default.Children.forEach(children, child => {
       if (child.type === _experimentalScript.default) {
-        if (child.props.strategy === 'eager') {
-          scriptLoader.eager = (scriptLoader.eager || []).concat([_objectSpread({}, child.props)]);
+        if (child.props.strategy === 'beforeInteractive') {
+          scriptLoader.beforeInteractive = (scriptLoader.beforeInteractive || []).concat([_objectSpread({}, child.props)]);
           return;
-        } else if (['lazy', 'defer'].includes(child.props.strategy)) {
+        } else if (['lazyOnload', 'afterInteractive'].includes(child.props.strategy)) {
           scriptLoaderItems.push(child.props);
           return;
         }
@@ -838,10 +818,11 @@ class Head extends _react.Component {
       dangerousAsPath,
       headTags,
       unstable_runtimeJS,
-      unstable_JsPreload
+      unstable_JsPreload,
+      disableOptimizedLoading
     } = this.context;
     const disableRuntimeJS = unstable_runtimeJS === false;
-    const disableJsPreload = unstable_JsPreload === false;
+    const disableJsPreload = unstable_JsPreload === false || !disableOptimizedLoading;
     this.context.docComponentsRendered.Head = true;
     let {
       head
@@ -987,7 +968,7 @@ class Head extends _react.Component {
       href: canonicalBase + getAmpPath(ampPath, dangerousAsPath)
     }),  true && this.getCssLinks(files),  true && /*#__PURE__*/_react.default.createElement("noscript", {
       "data-n-css": (_this$props$nonce = this.props.nonce) != null ? _this$props$nonce : ''
-    }), !disableRuntimeJS && !disableJsPreload && this.getPreloadDynamicChunks(), !disableRuntimeJS && !disableJsPreload && this.getPreloadMainLinks(files),  false && 0,  false && /*#__PURE__*/0, this.context.isDevelopment &&
+    }), !disableRuntimeJS && !disableJsPreload && this.getPreloadDynamicChunks(), !disableRuntimeJS && !disableJsPreload && this.getPreloadMainLinks(files), !disableOptimizedLoading && !disableRuntimeJS && this.getPolyfillScripts(), !disableOptimizedLoading && !disableRuntimeJS && this.getPreNextScripts(), !disableOptimizedLoading && !disableRuntimeJS && this.getDynamicChunks(files), !disableOptimizedLoading && !disableRuntimeJS && this.getScripts(files),  false && 0,  false && /*#__PURE__*/0, this.context.isDevelopment &&
     /*#__PURE__*/
     // this element is used to mount development styles so the
     // ordering matches production
@@ -1029,78 +1010,19 @@ class NextScript extends _react.Component {
   }
 
   getDynamicChunks(files) {
-    const {
-      dynamicImports,
-      assetPrefix,
-      isDevelopment,
-      devOnlyCacheBusterQueryString
-    } = this.context;
-    return dynamicImports.map(file => {
-      if (!file.endsWith('.js') || files.allFiles.includes(file)) return null;
-      return /*#__PURE__*/_react.default.createElement("script", {
-        async: !isDevelopment,
-        key: file,
-        src: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
-        nonce: this.props.nonce,
-        crossOrigin: this.props.crossOrigin || undefined
-      });
-    });
+    return getDynamicChunks(this.context, this.props, files);
   }
 
   getPreNextScripts() {
-    const {
-      scriptLoader
-    } = this.context;
-    return (scriptLoader.eager || []).map(file => {
-      const {
-        strategy
-      } = file,
-            props = _objectWithoutProperties(file, ["strategy"]);
-
-      return /*#__PURE__*/_react.default.createElement("script", Object.assign({}, props, {
-        nonce: this.props.nonce,
-        crossOrigin: this.props.crossOrigin || undefined
-      }));
-    });
+    return getPreNextScripts(this.context, this.props);
   }
 
   getScripts(files) {
-    var _buildManifest$lowPri;
-
-    const {
-      assetPrefix,
-      buildManifest,
-      isDevelopment,
-      devOnlyCacheBusterQueryString
-    } = this.context;
-    const normalScripts = files.allFiles.filter(file => file.endsWith('.js'));
-    const lowPriorityScripts = (_buildManifest$lowPri = buildManifest.lowPriorityFiles) == null ? void 0 : _buildManifest$lowPri.filter(file => file.endsWith('.js'));
-    return [...normalScripts, ...lowPriorityScripts].map(file => {
-      return /*#__PURE__*/_react.default.createElement("script", {
-        key: file,
-        src: `${assetPrefix}/_next/${encodeURI(file)}${devOnlyCacheBusterQueryString}`,
-        nonce: this.props.nonce,
-        async: !isDevelopment,
-        crossOrigin: this.props.crossOrigin || undefined
-      });
-    });
+    return getScripts(this.context, this.props, files);
   }
 
   getPolyfillScripts() {
-    // polyfills.js has to be rendered as nomodule without async
-    // It also has to be the first script to load
-    const {
-      assetPrefix,
-      buildManifest,
-      devOnlyCacheBusterQueryString
-    } = this.context;
-    return buildManifest.polyfillFiles.filter(polyfill => polyfill.endsWith('.js') && !polyfill.endsWith('.module.js')).map(polyfill => /*#__PURE__*/_react.default.createElement("script", {
-      key: polyfill,
-      nonce: this.props.nonce,
-      crossOrigin: this.props.crossOrigin || undefined,
-      noModule: true,
-      src: `${assetPrefix}/_next/${polyfill}${devOnlyCacheBusterQueryString}`
-    }));
+    return getPolyfillScripts(this.context, this.props);
   }
 
   static getInlineScriptSource(documentProps) {
@@ -1127,7 +1049,8 @@ class NextScript extends _react.Component {
       buildManifest,
       unstable_runtimeJS,
       docComponentsRendered,
-      devOnlyCacheBusterQueryString
+      devOnlyCacheBusterQueryString,
+      disableOptimizedLoading
     } = this.context;
     const disableRuntimeJS = unstable_runtimeJS === false;
     docComponentsRendered.NextScript = true;
@@ -1172,7 +1095,7 @@ class NextScript extends _react.Component {
       dangerouslySetInnerHTML: {
         __html: NextScript.getInlineScriptSource(this.context)
       }
-    }), !disableRuntimeJS && this.getPolyfillScripts(), !disableRuntimeJS && this.getPreNextScripts(), disableRuntimeJS ? null : this.getDynamicChunks(files), disableRuntimeJS ? null : this.getScripts(files));
+    }), disableOptimizedLoading && !disableRuntimeJS && this.getPolyfillScripts(), disableOptimizedLoading && !disableRuntimeJS && this.getPreNextScripts(), disableOptimizedLoading && !disableRuntimeJS && this.getDynamicChunks(files), disableOptimizedLoading && !disableRuntimeJS && this.getScripts(files));
   }
 
 }
@@ -1199,723 +1122,6 @@ exports.__esModule=true;exports.htmlEscapeJsonString=htmlEscapeJsonString;// Thi
 // License: https://github.com/zertosh/htmlescape/blob/0527ca7156a524d256101bb310a9f970f63078ad/LICENSE
 const ESCAPE_LOOKUP={'&':'\\u0026','>':'\\u003e','<':'\\u003c','\u2028':'\\u2028','\u2029':'\\u2029'};const ESCAPE_REGEX=/[&><\u2028\u2029]/g;function htmlEscapeJsonString(str){return str.replace(ESCAPE_REGEX,match=>ESCAPE_LOOKUP[match]);}
 //# sourceMappingURL=htmlescape.js.map
-
-/***/ }),
-
-/***/ 225:
-/***/ (function(__unused_webpack_module, exports) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.default = void 0;
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-/*
-Based on Glamor's sheet
-https://github.com/threepointone/glamor/blob/667b480d31b3721a905021b26e1290ce92ca2879/src/sheet.js
-*/
-var isProd = typeof process !== 'undefined' && process.env && "production" === 'production';
-
-var isString = function isString(o) {
-  return Object.prototype.toString.call(o) === '[object String]';
-};
-
-var StyleSheet = /*#__PURE__*/function () {
-  function StyleSheet(_temp) {
-    var _ref = _temp === void 0 ? {} : _temp,
-        _ref$name = _ref.name,
-        name = _ref$name === void 0 ? 'stylesheet' : _ref$name,
-        _ref$optimizeForSpeed = _ref.optimizeForSpeed,
-        optimizeForSpeed = _ref$optimizeForSpeed === void 0 ? isProd : _ref$optimizeForSpeed,
-        _ref$isBrowser = _ref.isBrowser,
-        isBrowser = _ref$isBrowser === void 0 ? typeof window !== 'undefined' : _ref$isBrowser;
-
-    invariant(isString(name), '`name` must be a string');
-    this._name = name;
-    this._deletedRulePlaceholder = "#" + name + "-deleted-rule____{}";
-    invariant(typeof optimizeForSpeed === 'boolean', '`optimizeForSpeed` must be a boolean');
-    this._optimizeForSpeed = optimizeForSpeed;
-    this._isBrowser = isBrowser;
-    this._serverSheet = undefined;
-    this._tags = [];
-    this._injected = false;
-    this._rulesCount = 0;
-    var node = this._isBrowser && document.querySelector('meta[property="csp-nonce"]');
-    this._nonce = node ? node.getAttribute('content') : null;
-  }
-
-  var _proto = StyleSheet.prototype;
-
-  _proto.setOptimizeForSpeed = function setOptimizeForSpeed(bool) {
-    invariant(typeof bool === 'boolean', '`setOptimizeForSpeed` accepts a boolean');
-    invariant(this._rulesCount === 0, 'optimizeForSpeed cannot be when rules have already been inserted');
-    this.flush();
-    this._optimizeForSpeed = bool;
-    this.inject();
-  };
-
-  _proto.isOptimizeForSpeed = function isOptimizeForSpeed() {
-    return this._optimizeForSpeed;
-  };
-
-  _proto.inject = function inject() {
-    var _this = this;
-
-    invariant(!this._injected, 'sheet already injected');
-    this._injected = true;
-
-    if (this._isBrowser && this._optimizeForSpeed) {
-      this._tags[0] = this.makeStyleTag(this._name);
-      this._optimizeForSpeed = 'insertRule' in this.getSheet();
-
-      if (!this._optimizeForSpeed) {
-        if (!isProd) {
-          console.warn('StyleSheet: optimizeForSpeed mode not supported falling back to standard mode.');
-        }
-
-        this.flush();
-        this._injected = true;
-      }
-
-      return;
-    }
-
-    this._serverSheet = {
-      cssRules: [],
-      insertRule: function insertRule(rule, index) {
-        if (typeof index === 'number') {
-          _this._serverSheet.cssRules[index] = {
-            cssText: rule
-          };
-        } else {
-          _this._serverSheet.cssRules.push({
-            cssText: rule
-          });
-        }
-
-        return index;
-      },
-      deleteRule: function deleteRule(index) {
-        _this._serverSheet.cssRules[index] = null;
-      }
-    };
-  };
-
-  _proto.getSheetForTag = function getSheetForTag(tag) {
-    if (tag.sheet) {
-      return tag.sheet;
-    } // this weirdness brought to you by firefox
-
-
-    for (var i = 0; i < document.styleSheets.length; i++) {
-      if (document.styleSheets[i].ownerNode === tag) {
-        return document.styleSheets[i];
-      }
-    }
-  };
-
-  _proto.getSheet = function getSheet() {
-    return this.getSheetForTag(this._tags[this._tags.length - 1]);
-  };
-
-  _proto.insertRule = function insertRule(rule, index) {
-    invariant(isString(rule), '`insertRule` accepts only strings');
-
-    if (!this._isBrowser) {
-      if (typeof index !== 'number') {
-        index = this._serverSheet.cssRules.length;
-      }
-
-      this._serverSheet.insertRule(rule, index);
-
-      return this._rulesCount++;
-    }
-
-    if (this._optimizeForSpeed) {
-      var sheet = this.getSheet();
-
-      if (typeof index !== 'number') {
-        index = sheet.cssRules.length;
-      } // this weirdness for perf, and chrome's weird bug
-      // https://stackoverflow.com/questions/20007992/chrome-suddenly-stopped-accepting-insertrule
-
-
-      try {
-        sheet.insertRule(rule, index);
-      } catch (error) {
-        if (!isProd) {
-          console.warn("StyleSheet: illegal rule: \n\n" + rule + "\n\nSee https://stackoverflow.com/q/20007992 for more info");
-        }
-
-        return -1;
-      }
-    } else {
-      var insertionPoint = this._tags[index];
-
-      this._tags.push(this.makeStyleTag(this._name, rule, insertionPoint));
-    }
-
-    return this._rulesCount++;
-  };
-
-  _proto.replaceRule = function replaceRule(index, rule) {
-    if (this._optimizeForSpeed || !this._isBrowser) {
-      var sheet = this._isBrowser ? this.getSheet() : this._serverSheet;
-
-      if (!rule.trim()) {
-        rule = this._deletedRulePlaceholder;
-      }
-
-      if (!sheet.cssRules[index]) {
-        // @TBD Should we throw an error?
-        return index;
-      }
-
-      sheet.deleteRule(index);
-
-      try {
-        sheet.insertRule(rule, index);
-      } catch (error) {
-        if (!isProd) {
-          console.warn("StyleSheet: illegal rule: \n\n" + rule + "\n\nSee https://stackoverflow.com/q/20007992 for more info");
-        } // In order to preserve the indices we insert a deleteRulePlaceholder
-
-
-        sheet.insertRule(this._deletedRulePlaceholder, index);
-      }
-    } else {
-      var tag = this._tags[index];
-      invariant(tag, "old rule at index `" + index + "` not found");
-      tag.textContent = rule;
-    }
-
-    return index;
-  };
-
-  _proto.deleteRule = function deleteRule(index) {
-    if (!this._isBrowser) {
-      this._serverSheet.deleteRule(index);
-
-      return;
-    }
-
-    if (this._optimizeForSpeed) {
-      this.replaceRule(index, '');
-    } else {
-      var tag = this._tags[index];
-      invariant(tag, "rule at index `" + index + "` not found");
-      tag.parentNode.removeChild(tag);
-      this._tags[index] = null;
-    }
-  };
-
-  _proto.flush = function flush() {
-    this._injected = false;
-    this._rulesCount = 0;
-
-    if (this._isBrowser) {
-      this._tags.forEach(function (tag) {
-        return tag && tag.parentNode.removeChild(tag);
-      });
-
-      this._tags = [];
-    } else {
-      // simpler on server
-      this._serverSheet.cssRules = [];
-    }
-  };
-
-  _proto.cssRules = function cssRules() {
-    var _this2 = this;
-
-    if (!this._isBrowser) {
-      return this._serverSheet.cssRules;
-    }
-
-    return this._tags.reduce(function (rules, tag) {
-      if (tag) {
-        rules = rules.concat(Array.prototype.map.call(_this2.getSheetForTag(tag).cssRules, function (rule) {
-          return rule.cssText === _this2._deletedRulePlaceholder ? null : rule;
-        }));
-      } else {
-        rules.push(null);
-      }
-
-      return rules;
-    }, []);
-  };
-
-  _proto.makeStyleTag = function makeStyleTag(name, cssString, relativeToTag) {
-    if (cssString) {
-      invariant(isString(cssString), 'makeStyleTag acceps only strings as second parameter');
-    }
-
-    var tag = document.createElement('style');
-    if (this._nonce) tag.setAttribute('nonce', this._nonce);
-    tag.type = 'text/css';
-    tag.setAttribute("data-" + name, '');
-
-    if (cssString) {
-      tag.appendChild(document.createTextNode(cssString));
-    }
-
-    var head = document.head || document.getElementsByTagName('head')[0];
-
-    if (relativeToTag) {
-      head.insertBefore(tag, relativeToTag);
-    } else {
-      head.appendChild(tag);
-    }
-
-    return tag;
-  };
-
-  _createClass(StyleSheet, [{
-    key: "length",
-    get: function get() {
-      return this._rulesCount;
-    }
-  }]);
-
-  return StyleSheet;
-}();
-
-exports.default = StyleSheet;
-
-function invariant(condition, message) {
-  if (!condition) {
-    throw new Error("StyleSheet: " + message + ".");
-  }
-}
-
-/***/ }),
-
-/***/ 897:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.default = flushToReact;
-exports.flushToHTML = flushToHTML;
-
-var _react = _interopRequireDefault(__webpack_require__(297));
-
-var _style = __webpack_require__(629);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function flushToReact(options) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  return (0, _style.flush)().map(function (args) {
-    var id = args[0];
-    var css = args[1];
-    return _react["default"].createElement('style', {
-      id: "__" + id,
-      // Avoid warnings upon render with a key
-      key: "__" + id,
-      nonce: options.nonce ? options.nonce : undefined,
-      dangerouslySetInnerHTML: {
-        __html: css
-      }
-    });
-  });
-}
-
-function flushToHTML(options) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  return (0, _style.flush)().reduce(function (html, args) {
-    var id = args[0];
-    var css = args[1];
-    html += "<style id=\"__" + id + "\"" + (options.nonce ? " nonce=\"" + options.nonce + "\"" : '') + ">" + css + "</style>";
-    return html;
-  }, '');
-}
-
-/***/ }),
-
-/***/ 629:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.flush = flush;
-exports.default = void 0;
-
-var _react = __webpack_require__(297);
-
-var _stylesheetRegistry = _interopRequireDefault(__webpack_require__(938));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
-var styleSheetRegistry = new _stylesheetRegistry["default"]();
-
-var JSXStyle = /*#__PURE__*/function (_Component) {
-  _inheritsLoose(JSXStyle, _Component);
-
-  function JSXStyle(props) {
-    var _this;
-
-    _this = _Component.call(this, props) || this;
-    _this.prevProps = {};
-    return _this;
-  }
-
-  JSXStyle.dynamic = function dynamic(info) {
-    return info.map(function (tagInfo) {
-      var baseId = tagInfo[0];
-      var props = tagInfo[1];
-      return styleSheetRegistry.computeId(baseId, props);
-    }).join(' ');
-  } // probably faster than PureComponent (shallowEqual)
-  ;
-
-  var _proto = JSXStyle.prototype;
-
-  _proto.shouldComponentUpdate = function shouldComponentUpdate(otherProps) {
-    return this.props.id !== otherProps.id || // We do this check because `dynamic` is an array of strings or undefined.
-    // These are the computed values for dynamic styles.
-    String(this.props.dynamic) !== String(otherProps.dynamic);
-  };
-
-  _proto.componentWillUnmount = function componentWillUnmount() {
-    styleSheetRegistry.remove(this.props);
-  };
-
-  _proto.render = function render() {
-    // This is a workaround to make the side effect async safe in the "render" phase.
-    // See https://github.com/zeit/styled-jsx/pull/484
-    if (this.shouldComponentUpdate(this.prevProps)) {
-      // Updates
-      if (this.prevProps.id) {
-        styleSheetRegistry.remove(this.prevProps);
-      }
-
-      styleSheetRegistry.add(this.props);
-      this.prevProps = this.props;
-    }
-
-    return null;
-  };
-
-  return JSXStyle;
-}(_react.Component);
-
-exports.default = JSXStyle;
-
-function flush() {
-  var cssRules = styleSheetRegistry.cssRules();
-  styleSheetRegistry.flush();
-  return cssRules;
-}
-
-/***/ }),
-
-/***/ 938:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.default = void 0;
-
-var _stringHash = _interopRequireDefault(__webpack_require__(887));
-
-var _stylesheet = _interopRequireDefault(__webpack_require__(225));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var sanitize = function sanitize(rule) {
-  return rule.replace(/\/style/gi, '\\/style');
-};
-
-var StyleSheetRegistry = /*#__PURE__*/function () {
-  function StyleSheetRegistry(_temp) {
-    var _ref = _temp === void 0 ? {} : _temp,
-        _ref$styleSheet = _ref.styleSheet,
-        styleSheet = _ref$styleSheet === void 0 ? null : _ref$styleSheet,
-        _ref$optimizeForSpeed = _ref.optimizeForSpeed,
-        optimizeForSpeed = _ref$optimizeForSpeed === void 0 ? false : _ref$optimizeForSpeed,
-        _ref$isBrowser = _ref.isBrowser,
-        isBrowser = _ref$isBrowser === void 0 ? typeof window !== 'undefined' : _ref$isBrowser;
-
-    this._sheet = styleSheet || new _stylesheet["default"]({
-      name: 'styled-jsx',
-      optimizeForSpeed: optimizeForSpeed
-    });
-
-    this._sheet.inject();
-
-    if (styleSheet && typeof optimizeForSpeed === 'boolean') {
-      this._sheet.setOptimizeForSpeed(optimizeForSpeed);
-
-      this._optimizeForSpeed = this._sheet.isOptimizeForSpeed();
-    }
-
-    this._isBrowser = isBrowser;
-    this._fromServer = undefined;
-    this._indices = {};
-    this._instancesCounts = {};
-    this.computeId = this.createComputeId();
-    this.computeSelector = this.createComputeSelector();
-  }
-
-  var _proto = StyleSheetRegistry.prototype;
-
-  _proto.add = function add(props) {
-    var _this = this;
-
-    if (undefined === this._optimizeForSpeed) {
-      this._optimizeForSpeed = Array.isArray(props.children);
-
-      this._sheet.setOptimizeForSpeed(this._optimizeForSpeed);
-
-      this._optimizeForSpeed = this._sheet.isOptimizeForSpeed();
-    }
-
-    if (this._isBrowser && !this._fromServer) {
-      this._fromServer = this.selectFromServer();
-      this._instancesCounts = Object.keys(this._fromServer).reduce(function (acc, tagName) {
-        acc[tagName] = 0;
-        return acc;
-      }, {});
-    }
-
-    var _this$getIdAndRules = this.getIdAndRules(props),
-        styleId = _this$getIdAndRules.styleId,
-        rules = _this$getIdAndRules.rules; // Deduping: just increase the instances count.
-
-
-    if (styleId in this._instancesCounts) {
-      this._instancesCounts[styleId] += 1;
-      return;
-    }
-
-    var indices = rules.map(function (rule) {
-      return _this._sheet.insertRule(rule);
-    }) // Filter out invalid rules
-    .filter(function (index) {
-      return index !== -1;
-    });
-    this._indices[styleId] = indices;
-    this._instancesCounts[styleId] = 1;
-  };
-
-  _proto.remove = function remove(props) {
-    var _this2 = this;
-
-    var _this$getIdAndRules2 = this.getIdAndRules(props),
-        styleId = _this$getIdAndRules2.styleId;
-
-    invariant(styleId in this._instancesCounts, "styleId: `" + styleId + "` not found");
-    this._instancesCounts[styleId] -= 1;
-
-    if (this._instancesCounts[styleId] < 1) {
-      var tagFromServer = this._fromServer && this._fromServer[styleId];
-
-      if (tagFromServer) {
-        tagFromServer.parentNode.removeChild(tagFromServer);
-        delete this._fromServer[styleId];
-      } else {
-        this._indices[styleId].forEach(function (index) {
-          return _this2._sheet.deleteRule(index);
-        });
-
-        delete this._indices[styleId];
-      }
-
-      delete this._instancesCounts[styleId];
-    }
-  };
-
-  _proto.update = function update(props, nextProps) {
-    this.add(nextProps);
-    this.remove(props);
-  };
-
-  _proto.flush = function flush() {
-    this._sheet.flush();
-
-    this._sheet.inject();
-
-    this._fromServer = undefined;
-    this._indices = {};
-    this._instancesCounts = {};
-    this.computeId = this.createComputeId();
-    this.computeSelector = this.createComputeSelector();
-  };
-
-  _proto.cssRules = function cssRules() {
-    var _this3 = this;
-
-    var fromServer = this._fromServer ? Object.keys(this._fromServer).map(function (styleId) {
-      return [styleId, _this3._fromServer[styleId]];
-    }) : [];
-
-    var cssRules = this._sheet.cssRules();
-
-    return fromServer.concat(Object.keys(this._indices).map(function (styleId) {
-      return [styleId, _this3._indices[styleId].map(function (index) {
-        return cssRules[index].cssText;
-      }).join(_this3._optimizeForSpeed ? '' : '\n')];
-    }) // filter out empty rules
-    .filter(function (rule) {
-      return Boolean(rule[1]);
-    }));
-  }
-  /**
-   * createComputeId
-   *
-   * Creates a function to compute and memoize a jsx id from a basedId and optionally props.
-   */
-  ;
-
-  _proto.createComputeId = function createComputeId() {
-    var cache = {};
-    return function (baseId, props) {
-      if (!props) {
-        return "jsx-" + baseId;
-      }
-
-      var propsToString = String(props);
-      var key = baseId + propsToString; // return `jsx-${hashString(`${baseId}-${propsToString}`)}`
-
-      if (!cache[key]) {
-        cache[key] = "jsx-" + (0, _stringHash["default"])(baseId + "-" + propsToString);
-      }
-
-      return cache[key];
-    };
-  }
-  /**
-   * createComputeSelector
-   *
-   * Creates a function to compute and memoize dynamic selectors.
-   */
-  ;
-
-  _proto.createComputeSelector = function createComputeSelector(selectoPlaceholderRegexp) {
-    if (selectoPlaceholderRegexp === void 0) {
-      selectoPlaceholderRegexp = /__jsx-style-dynamic-selector/g;
-    }
-
-    var cache = {};
-    return function (id, css) {
-      // Sanitize SSR-ed CSS.
-      // Client side code doesn't need to be sanitized since we use
-      // document.createTextNode (dev) and the CSSOM api sheet.insertRule (prod).
-      if (!this._isBrowser) {
-        css = sanitize(css);
-      }
-
-      var idcss = id + css;
-
-      if (!cache[idcss]) {
-        cache[idcss] = css.replace(selectoPlaceholderRegexp, id);
-      }
-
-      return cache[idcss];
-    };
-  };
-
-  _proto.getIdAndRules = function getIdAndRules(props) {
-    var _this4 = this;
-
-    var css = props.children,
-        dynamic = props.dynamic,
-        id = props.id;
-
-    if (dynamic) {
-      var styleId = this.computeId(id, dynamic);
-      return {
-        styleId: styleId,
-        rules: Array.isArray(css) ? css.map(function (rule) {
-          return _this4.computeSelector(styleId, rule);
-        }) : [this.computeSelector(styleId, css)]
-      };
-    }
-
-    return {
-      styleId: this.computeId(id),
-      rules: Array.isArray(css) ? css : [css]
-    };
-  }
-  /**
-   * selectFromServer
-   *
-   * Collects style tags from the document with id __jsx-XXX
-   */
-  ;
-
-  _proto.selectFromServer = function selectFromServer() {
-    var elements = Array.prototype.slice.call(document.querySelectorAll('[id^="__jsx-"]'));
-    return elements.reduce(function (acc, element) {
-      var id = element.id.slice(2);
-      acc[id] = element;
-      return acc;
-    }, {});
-  };
-
-  return StyleSheetRegistry;
-}();
-
-exports.default = StyleSheetRegistry;
-
-function invariant(condition, message) {
-  if (!condition) {
-    throw new Error("StyleSheetRegistry: " + message + ".");
-  }
-}
-
-/***/ }),
-
-/***/ 97:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-module.exports = __webpack_require__(897)
-
-
-/***/ }),
-
-/***/ 887:
-/***/ (function(module) {
-
-"use strict";
-
-
-function hash(str) {
-  var hash = 5381,
-      i    = str.length;
-
-  while(i) {
-    hash = (hash * 33) ^ str.charCodeAt(--i);
-  }
-
-  /* JavaScript does bitwise operations (like XOR, above) on 32-bit signed
-   * integers. Since we want the results to be always positive, convert the
-   * signed int to an unsigned by doing an unsigned bitshift. */
-  return hash >>> 0;
-}
-
-module.exports = hash;
-
 
 /***/ }),
 
@@ -1980,6 +1186,14 @@ module.exports = require("prop-types");;
 
 "use strict";
 module.exports = require("react");;
+
+/***/ }),
+
+/***/ 168:
+/***/ (function(module) {
+
+"use strict";
+module.exports = require("styled-jsx/server");;
 
 /***/ })
 
